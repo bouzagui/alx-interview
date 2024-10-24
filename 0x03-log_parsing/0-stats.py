@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-""" doc """
+"""Doc"""
 import sys
 import signal
 
@@ -17,31 +17,28 @@ def print_stats():
 def signal_handler():
     """Handles keyboard interruption"""
     print_stats()
+    sys.exit(0)
 
-    signal.signal(signal.SIGINT, signal_handler)
+signal.signal(signal.SIGINT, signal_handler)
 
+for line in sys.stdin:
     try:
-        for line in sys.stdin:
-            parts = line.split()
-            if len(parts) < 7:
-                continue
+        parts = line.split()
+        if len(parts) < 7:
+            continue
 
-            file_size = int(parts[-1])
-            status_code = int(parts[-2])
+        file_size = int(parts[-1])
+        status_code = int(parts[-2])
 
-            total_size += file_size
+        total_size += file_size
 
-            if status_code in status_codes_count:
-                status_codes_count[status_code] += 1
+        if status_code in status_codes_count:
+            status_codes_count[status_code] += 1
 
-            line_count += 1
+        line_count += 1
 
-            if line_count % 10 == 0:
-                print_stats()
+        if line_count % 10 == 0:
+            print_stats()
 
     except (ValueError, IndexError):
-        pass
-
-
-if __name__ == "__main__":
-    signal_handler()
+        continue
